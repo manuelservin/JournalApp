@@ -1,30 +1,50 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { useForm } from "../../hooks/useForm";
+import { startLoginEmailPassword, startGoogleLogin } from "../../actions/auth";
 const LoginScreen = () => {
+  const dispatch = useDispatch();
+  const [formValues, handleInputChange] = useForm({
+    email: "manu@gmail.com",
+    password: "123456",
+  });
+  const { email, password } = formValues;
+  const handleLogin = (e) => {
+    e.preventDefault();
+    dispatch(startLoginEmailPassword(email, password));
+  };
+
+  const handleGoogleLogin = () => {
+    dispatch(startGoogleLogin());
+  };
   return (
     <>
       <h3 className="auth__title">Login</h3>
 
-      <form>
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Email"
           name="email"
           className="auth__input"
           autoComplete="off"
+          value={email}
+          onChange={handleInputChange}
         />
         <input
           type="password"
           placeholder="Password"
           name="password"
           className="auth__input"
+          value={password}
+          onChange={handleInputChange}
         />
         <button className="btn btn-primary btn-block" type="submit">
           Login
         </button>
         <div className="auth___social-networks"></div>
-        <div className="google-btn">
+        <div className="google-btn" onClick={handleGoogleLogin}>
           <div className="google-icon-wrapper">
             <img
               className="google-icon"
