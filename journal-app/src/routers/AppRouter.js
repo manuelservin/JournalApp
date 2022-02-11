@@ -11,6 +11,8 @@ import AuthRouter from "./AuthRouter";
 
 import JournalScreen from "../components/journal/JournalScreen";
 import { login } from "../actions/auth";
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -38,9 +40,19 @@ const AppRouter = () => {
         {/* A <Switch> looks through its children <Route>s and
         renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/auth" component={AuthRouter} />
+          <PublicRoute
+            isAuthenticated={isLogged}
+            path="/auth"
+            component={AuthRouter}
+          />
 
-          <Route exact path="/" component={JournalScreen} />
+          <PrivateRoute
+            isAuthenticated={isLogged}
+            exact
+            path="/"
+            component={JournalScreen}
+          />
+
           <Redirect to="/auth/login" />
         </Switch>
       </div>
