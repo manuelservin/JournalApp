@@ -14,15 +14,18 @@ import { login } from "../actions/auth";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 
+import { startLoadingNotes } from "../actions/notes";
+
 const AppRouter = () => {
   const dispatch = useDispatch();
   const [checking, setChecking] = useState(true);
   const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user?.uid) {
         dispatch(login(user.uid, user.displayName));
         setIsLogged(true);
+        dispatch(startLoadingNotes(user.uid));
       } else {
         setIsLogged(false);
       }
